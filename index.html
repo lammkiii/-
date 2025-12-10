@@ -10,6 +10,7 @@
             --chiikawa-pink: #ffdae0;
             --hachiware-blue: #dceefc;
             --usagi-yellow: #fff8bd;
+            --momonga-orange: #ffe4c4; /* 新增顏色給錯題按鈕 */
             --dark-text: #6b5b5b;
             --accent-color: #ff9fb2;
         }
@@ -41,7 +42,6 @@
             overflow: hidden;
         }
 
-        /* 裝飾用的小標題 */
         h1 {
             color: #ff8ba7;
             font-size: 28px;
@@ -157,29 +157,49 @@
             animation: shake 0.4s;
         }
 
-        /* 下一題按鈕 */
+        /* 按鈕群組 */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
         .nav-btn {
-            margin-top: 25px;
-            padding: 15px 40px;
+            padding: 12px 25px;
             background-color: var(--chiikawa-pink);
             color: #6b5b5b;
             border: none;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 159, 178, 0.4);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             transition: transform 0.2s;
+            min-width: 120px;
         }
 
         .nav-btn:hover {
             transform: scale(1.05);
-            background-color: #ffc2cd;
+            filter: brightness(0.95);
         }
 
-        .home-btn {
-            background-color: var(--hachiware-blue);
-            color: #5b7c8f;
+        .home-btn { background-color: #b2bec3; color: white; }
+        .retry-all-btn { background-color: var(--hachiware-blue); }
+        
+        /* 錯題重做按鈕特別樣式 */
+        .review-btn { 
+            background-color: #ff9f43; 
+            color: white;
+            border: 2px solid #ff9f43;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 159, 67, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 159, 67, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 159, 67, 0); }
         }
 
         .score-display {
@@ -189,7 +209,6 @@
             font-weight: 800;
         }
 
-        /* 可愛的小裝飾 */
         .cute-decoration {
             font-size: 50px;
             margin-bottom: -20px;
@@ -264,7 +283,7 @@
         <div class="options-grid" id="options-container">
             </div>
 
-        <button class="nav-btn" id="next-btn" style="display:none" onclick="nextQuestion()">
+        <button class="nav-btn" id="next-btn" style="display:none; margin-top: 25px;" onclick="nextQuestion()">
             下一題 Yaha! ➔
         </button>
     </div>
@@ -275,18 +294,23 @@
         <div class="score-display" id="final-score">0 / 0</div>
         <p id="feedback-msg" style="font-size: 18px; color: #6b5b5b;"></p>
         
-        <div style="display:flex; gap:10px; justify-content: center; margin-top:20px;">
-            <button class="nav-btn home-btn" onclick="goHome()">🏠 回首頁</button>
-            <button class="nav-btn" onclick="restartCurrentQuiz()">🔄 再玩一次</button>
+        <div class="btn-group">
+            <button class="nav-btn review-btn" id="review-btn" onclick="startReviewMode()" style="display:none">
+                🐹 重做錯題
+            </button>
+            <button class="nav-btn retry-all-btn" onclick="restartCurrentQuiz()">
+                🔄 全部重來
+            </button>
+            <button class="nav-btn home-btn" onclick="goHome()">
+                🏠 回首頁
+            </button>
         </div>
     </div>
 
 </div>
 
 <script>
-    /* ================= 資料庫 (保持不變) ================= */
-
-    // 1. 單字資料庫
+    /* ================= 資料庫 ================= */
     const vocabList = [
         { en: "Affect", zh: "情感 / 影響" }, { en: "Cognition", zh: "認知" }, { en: "Analytical", zh: "分析的" },
         { en: "Intuitive", zh: "直覺的" }, { en: "Attitude", zh: "態度" }, { en: "Bargaining power", zh: "議價能力" },
@@ -327,7 +351,6 @@
         { en: "Well-being", zh: "福祉" }, { en: "Wise", zh: "明智的" }
     ];
 
-    // 2. 測驗卷資料庫
     const paperList = [
         { q: "My father gave me ______ good advice on finding a job.", options: ["some", "many", "an", "few"], ans: "some" },
         { q: "How ______ gifts did you receive last Christmas?", options: ["many", "much", "any", "little"], ans: "many" },
@@ -355,6 +378,7 @@
     
     let currentMode = ''; 
     let quizData = [];
+    let wrongAnswers = []; // 用來儲存錯題
     let currentIndex = 0;
     let score = 0;
     let isAnswered = false;
@@ -374,9 +398,17 @@
         score = 0;
         
         if (mode === 'vocab') {
+            wrongAnswers = []; // 新遊戲清空錯題
             quizData = shuffle([...vocabList]);
-        } else {
+        } else if (mode === 'paper') {
+            wrongAnswers = []; // 新遊戲清空錯題
             quizData = shuffle([...paperList]);
+        } else if (mode === 'review') {
+            // 錯題模式：使用上次記錄的錯題，並且清空錯題庫(準備記錄這一次review又錯的)
+            // 為了避免引用問題，複製一份
+            quizData = [...wrongAnswers];
+            wrongAnswers = []; 
+            // 這裡不需 shuffle，或者也可以 shuffle
         }
 
         showScreen('quiz-screen');
@@ -400,54 +432,66 @@
         nextBtn.style.display = 'none';
         uiOptions.innerHTML = '';
 
-        if (currentMode === 'vocab') {
+        // 判斷該題目是屬於 vocab 還是 paper 類型 (因為 review 模式會混在一起)
+        // 簡單判斷：如果有 'zh' 屬性就是單字題，否則就是考卷題
+        
+        if (data.zh) {
+            // --- 單字題邏輯 ---
             uiQuestion.innerText = data.en;
             let options = [{ text: data.zh, correct: true }];
+            // 隨機錯誤選項
             while (options.length < 4) {
                 let randomItem = vocabList[Math.floor(Math.random() * vocabList.length)];
                 if (!options.some(o => o.text === randomItem.zh)) {
                     options.push({ text: randomItem.zh, correct: false });
                 }
             }
-            renderButtons(shuffle(options));
+            renderButtons(shuffle(options), 'vocab');
+
         } else {
+            // --- 考卷題邏輯 ---
             uiQuestion.innerText = data.q;
             let options = data.options.map(opt => ({
                 text: opt,
                 correct: opt === data.ans
             }));
-            renderButtons(shuffle(options));
+            renderButtons(shuffle(options), 'paper');
         }
     }
 
-    function renderButtons(options) {
+    function renderButtons(options, type) {
         const container = document.getElementById('options-container');
         options.forEach(opt => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
             btn.innerText = opt.text;
-            btn.onclick = () => checkAnswer(btn, opt.correct);
+            btn.onclick = () => checkAnswer(btn, opt.correct, type);
             container.appendChild(btn);
         });
     }
 
-    function checkAnswer(btn, isCorrect) {
+    function checkAnswer(btn, isCorrect, type) {
         if (isAnswered) return;
         isAnswered = true;
 
         const allBtns = document.querySelectorAll('.option-btn');
-        
+        const currentQ = quizData[currentIndex];
+
         if (isCorrect) {
             btn.classList.add('correct');
             score++;
             document.getElementById('score-text').innerText = `分數: ${score}`;
         } else {
             btn.classList.add('wrong');
+            // *** 記錄錯題 ***
+            wrongAnswers.push(currentQ);
+
+            // 顯示正確答案
             allBtns.forEach(b => {
-                if (currentMode === 'vocab') {
-                   if(b.innerText === quizData[currentIndex].zh) b.classList.add('correct');
+                if (type === 'vocab') {
+                   if(b.innerText === currentQ.zh) b.classList.add('correct');
                 } else {
-                   if(b.innerText === quizData[currentIndex].ans) b.classList.add('correct');
+                   if(b.innerText === currentQ.ans) b.classList.add('correct');
                 }
             });
         }
@@ -465,14 +509,29 @@
         showScreen('result-screen');
         document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
         
+        // 設置評語
         let msg = "";
-        let pct = score / quizData.length;
+        let pct = quizData.length > 0 ? score / quizData.length : 0;
         if (pct === 1) msg = "哇！太厲害了！完全勝利！🎉";
         else if (pct >= 0.8) msg = "很棒耶！差一點點就滿分了！✨";
         else if (pct >= 0.6) msg = "還不錯喔！繼續加油！💪";
         else msg = "別灰心，再一次挑戰吧！🥺";
-        
         document.getElementById('feedback-msg').innerText = msg;
+
+        // *** 控制「重做錯題」按鈕顯示 ***
+        const reviewBtn = document.getElementById('review-btn');
+        if (wrongAnswers.length > 0) {
+            reviewBtn.style.display = 'inline-block';
+            reviewBtn.innerText = `🐹 重做錯題 (${wrongAnswers.length}題)`;
+        } else {
+            reviewBtn.style.display = 'none';
+        }
+    }
+
+    function startReviewMode() {
+        // 進入錯題模式
+        // 注意：這裡不設定 currentMode 為 'vocab' 或 'paper'，而是 'review'
+        startQuiz('review');
     }
 
     function goHome() {
@@ -480,7 +539,17 @@
     }
 
     function restartCurrentQuiz() {
-        startQuiz(currentMode);
+        // 如果是 review 模式，按「全部重來」應該回到原本的測驗模式嗎？
+        // 這裡邏輯是：如果從主選單進來，就重玩那個模式。
+        if (currentMode === 'review') {
+             // 如果在複習模式按重來，應該是重玩「剛剛複習的那一組」嗎？
+             // 因為複習時錯題陣列被清空轉移了，這裡簡單處理：
+             // 建議回到首頁或重新開始一個新的完整測驗
+             alert("複習模式結束，將回到首頁選擇新的挑戰！");
+             goHome();
+        } else {
+            startQuiz(currentMode);
+        }
     }
 
 </script>
