@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英語詞彙測驗 (110單字挑戰)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .quiz-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .word-display {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2980b9;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        button.option-btn {
+            background-color: #fff;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #34495e;
+        }
+
+        button.option-btn:hover:not(:disabled) {
+            background-color: #eef2f3;
+            border-color: #3498db;
+        }
+
+        button.option-btn.correct {
+            background-color: #2ecc71;
+            border-color: #27ae60;
+            color: white;
+        }
+
+        button.option-btn.wrong {
+            background-color: #e74c3c;
+            border-color: #c0392b;
+            color: white;
+        }
+
+        .next-btn {
+            margin-top: 25px;
+            padding: 12px 30px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            display: none; /* Hidden by default */
+        }
+
+        .next-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .result-screen {
+            display: none;
+        }
+
+        .score-display {
+            font-size: 48px;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 500px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="quiz-screen">
+        <div class="stats-bar">
+            <span id="progress-text">題目: 1 / 110</span>
+            <span id="score-text">得分: 0</span>
+        </div>
+        
+        <h1>請選擇正確的中文意思</h1>
+        
+        <div class="word-display" id="english-word">Loading...</div>
+        
+        <div class="options-grid" id="options-container">
+            </div>
+
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">下一題</button>
+    </div>
+
+    <div id="result-screen" class="result-screen">
+        <h1>測驗結束!</h1>
+        <p>你的最終成績是：</p>
+        <div class="score-display" id="final-score">0 / 110</div>
+        <p id="feedback-msg"></p>
+        <button class="next-btn" style="display:inline-block" onclick="restartQuiz()">重新開始</button>
+    </div>
+</div>
+
+<script>
+    // 110 個單字與對應的中文意思
+    const vocabularyList = [
+        { en: "Affect", zh: "情感 / 影響" },
+        { en: "Cognition", zh: "認知" },
+        { en: "Analytical", zh: "分析的" },
+        { en: "Intuitive", zh: "直覺的" },
+        { en: "Attitude", zh: "態度" },
+        { en: "Bargaining power", zh: "議價能力 / 討價還價能力" },
+        { en: "Behaviourism", zh: "行為主義" },
+        { en: "Bonding", zh: "連結 / 親密關係" },
+        { en: "Capitalism", zh: "資本主義" },
+        { en: "Chaos", zh: "混亂 (名詞)" },
+        { en: "Chaotic", zh: "混亂的 (形容詞)" },
+        { en: "Character", zh: "性格 / 品格" },
+        { en: "Civil society", zh: "公民社會" },
+        { en: "Cognitive psychology", zh: "認知心理學" },
+        { en: "Complain", zh: "抱怨" },
+        { en: "Conscious", zh: "有意識的" },
+        { en: "Unconscious", zh: "無意識的 / 潛意識" },
+        { en: "Desire to be liked", zh: "渴望被喜愛" },
+        { en: "Desire to be right", zh: "渴望正確" },
+        { en: "Desire to be unique", zh: "渴望獨特" },
+        { en: "Despair", zh: "絕望" },
+        { en: "Hope", zh: "希望" },
+        { en: "Discrimination", zh: "歧視" },
+        { en: "Disgust", zh: "厭惡" },
+        { en: "Dream", zh: "夢想 / 夢" },
+        { en: "Nightmare", zh: "惡夢" },
+        { en: "Duty", zh: "責任 / 義務" },
+        { en: "Encouragement", zh: "鼓勵" },
+        { en: "Envy", zh: "嫉妒 / 羨慕" },
+        { en: "Environment", zh: "環境" },
+        { en: "Ethnic", zh: "種族的 / 民族的" },
+        { en: "Expectations", zh: "期望" },
+        { en: "Famine", zh: "饑荒" },
+        { en: "Female", zh: "女性" },
+        { en: "Male", zh: "男性" },
+        { en: "Feminine", zh: "女性化的 / 陰柔的" },
+        { en: "Masculine", zh: "男性化的 / 陽剛的" },
+        { en: "Gender", zh: "性別 (社會性別)" },
+        { en: "Globalization", zh: "全球化" },
+        { en: "Grassroots", zh: "草根 / 基層" },
+        { en: "Group pressure", zh: "群體壓力" },
+        { en: "Groupthink", zh: "群體迷思" },
+        { en: "Hatred", zh: "仇恨" },
+        { en: "Hero", zh: "英雄" },
+        { en: "Idol", zh: "偶像" },
+        { en: "Honest", zh: "誠實的" },
+        { en: "Truthful", zh: "真實的 / 誠實的" },
+        { en: "Human rights", zh: "人權" },
+        { en: "Idealistic", zh: "理想主義的" },
+        { en: "Realistic", zh: "現實主義的 / 實際的" },
+        { en: "Immigrants", zh: "移民" },
+        { en: "Initiative", zh: "主動性 / 倡議" },
+        { en: "Instinct", zh: "本能 / 直覺" },
+        { en: "Institutions", zh: "機構 / 制度" },
+        { en: "Intuition", zh: "直覺" },
+        { en: "Label", zh: "標籤" },
+        { en: "Liberalism", zh: "自由主義" },
+        { en: "Mature", zh: "成熟的" },
+        { en: "Immature", zh: "不成熟的" },
+        { en: "Mental illness", zh: "精神疾病" },
+        { en: "Miracle", zh: "奇蹟" },
+        { en: "Motive", zh: "動機" },
+        { en: "Natural disasters", zh: "自然災害" },
+        { en: "Norm (Social norm)", zh: "規範 (社會規範)" },
+        { en: "Oppressed", zh: "受壓迫的" },
+        { en: "Oppression", zh: "壓迫" },
+        { en: "Overcome", zh: "克服" },
+        { en: "Personality", zh: "個性 / 人格" },
+        { en: "Phenomenon", zh: "現象" },
+        { en: "Pity", zh: "憐憫 / 同情" },
+        { en: "Polite", zh: "有禮貌的" },
+        { en: "Impolite/rude", zh: "無禮的 / 粗魯的" },
+        { en: "Poverty", zh: "貧窮" },
+        { en: "Precious", zh: "珍貴的" },
+        { en: "Predict", zh: "預測" },
+        { en: "Prejudice", zh: "偏見" },
+        { en: "Priority", zh: "優先事項" },
+        { en: "Protect", zh: "保護" },
+        { en: "Psychiatry", zh: "精神病學" },
+        { en: "Refugee", zh: "難民" },
+        { en: "Rely", zh: "依賴 / 信賴" },
+        { en: "Respect", zh: "尊重" },
+        { en: "Disrespect", zh: "不尊重" },
+        { en: "Responsible", zh: "負責任的" },
+        { en: "Irresponsible", zh: "不負責任的" },
+        { en: "Role model", zh: "榜樣" },
+        { en: "Self-confidence", zh: "自信" },
+        { en: "Self-esteem", zh: "自尊" },
+        { en: "Sensible", zh: "明智的 / 合情理的" },
+        { en: "Social change", zh: "社會變遷" },
+        { en: "Social development", zh: "社會發展" },
+        { en: "Social Justice", zh: "社會正義" },
+        { en: "Social Welfare", zh: "社會福利" },
+        { en: "Socialism", zh: "社會主義" },
+        { en: "Stereotype", zh: "刻板印象" },
+        { en: "Stress", zh: "壓力 (生理/心理)" },
+        { en: "Pressure", zh: "壓力 (外部/物理)" },
+        { en: "Support", zh: "支持" },
+        { en: "Tactful", zh: "圓滑的 / 機智的" },
+        { en: "Terrorism", zh: "恐怖主義" },
+        { en: "Triad", zh: "三合會 / 黑社會" },
+        { en: "Troublesome", zh: "令人煩惱的 / 麻煩的" },
+        { en: "Understanding", zh: "理解 / 體諒" },
+        { en: "Values", zh: "價值觀" },
+        { en: "Virtues", zh: "美德" },
+        { en: "Vulnerable", zh: "脆弱的 / 易受傷的" },
+        { en: "Wanted", zh: "被通緝的 / 被需要的" },
+        { en: "Unwanted", zh: "不需要的 / 討人厭的" },
+        { en: "Well-being", zh: "福祉 / 健康快樂" },
+        { en: "Wise", zh: "明智的 / 有智慧的" }
+    ];
+
+    let currentQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let isAnswered = false;
+
+    // 洗牌算法 (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        // 複製一份列表並隨機打亂，這樣每次測驗順序都不同
+        currentQuestions = shuffleArray([...vocabularyList]); 
+        currentQuestionIndex = 0;
+        score = 0;
+        isAnswered = false;
+        
+        document.getElementById('quiz-screen').style.display = 'block';
+        document.getElementById('result-screen').style.display = 'none';
+        
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        if (currentQuestionIndex >= currentQuestions.length) {
+            showResult();
+            return;
+        }
+
+        isAnswered = false;
+        const currentData = currentQuestions[currentQuestionIndex];
+        
+        // 更新進度與分數
+        document.getElementById('progress-text').innerText = `題目: ${currentQuestionIndex + 1} / ${currentQuestions.length}`;
+        document.getElementById('score-text').innerText = `得分: ${score}`;
+        document.getElementById('english-word').innerText = currentData.en;
+        document.getElementById('next-btn').style.display = 'none';
+
+        // 生成選項
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+
+        // 1. 加入正確答案
+        let options = [{ text: currentData.zh, isCorrect: true }];
+
+        // 2. 加入3個錯誤答案 (從列表中隨機抽取，不能與正確答案相同)
+        while (options.length < 4) {
+            const randomWord = vocabularyList[Math.floor(Math.random() * vocabularyList.length)];
+            // 確保錯誤選項不重複，且不等於正確答案
+            const isDuplicate = options.some(opt => opt.text === randomWord.zh);
+            if (!isDuplicate && randomWord.zh !== currentData.zh) {
+                options.push({ text: randomWord.zh, isCorrect: false });
+            }
+        }
+
+        // 3. 打亂選項順序 (A, B, C, D)
+        options = shuffleArray(options);
+
+        // 4. 渲染按鈕
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => checkAnswer(btn, opt.isCorrect);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedBtn, isCorrect) {
+        if (isAnswered) return; // 防止重複點擊
+        isAnswered = true;
+
+        const buttons = document.querySelectorAll('.option-btn');
+        
+        if (isCorrect) {
+            selectedBtn.classList.add('correct');
+            score++;
+            document.getElementById('score-text').innerText = `得分: ${score}`;
+        } else {
+            selectedBtn.classList.add('wrong');
+            // 顯示正確答案是哪一個
+            buttons.forEach(btn => {
+                // 這裡透過比對文字內容來找正確答案
+                const currentWord = currentQuestions[currentQuestionIndex];
+                if (btn.innerText === currentWord.zh) {
+                    btn.classList.add('correct');
+                }
+            });
+        }
+
+        // 禁用所有按鈕
+        buttons.forEach(btn => btn.disabled = true);
+        
+        // 顯示下一題按鈕
+        document.getElementById('next-btn').style.display = 'inline-block';
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        loadQuestion();
+    }
+
+    function showResult() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('final-score').innerText = `${score} / ${currentQuestions.length}`;
+        
+        let msg = "";
+        const percentage = (score / currentQuestions.length) * 100;
+        if (percentage === 100) msg = "太神了！滿分！";
+        else if (percentage >= 90) msg = "非常優秀！";
+        else if (percentage >= 70) msg = "做得不錯，繼續保持！";
+        else msg = "再接再厲，多練習幾次吧！";
+        
+        document.getElementById('feedback-msg').innerText = msg;
+    }
+
+    function restartQuiz() {
+        initQuiz();
+    }
+
+    // 啟動程式
+    initQuiz();
+
+</script>
+
+</body>
+</html>
