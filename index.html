@@ -3,389 +3,485 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英語詞彙測驗 (110單字挑戰)</title>
+    <title>吉伊卡哇英語教室</title>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --chiikawa-pink: #ffdae0;
+            --hachiware-blue: #dceefc;
+            --usagi-yellow: #fff8bd;
+            --dark-text: #6b5b5b;
+            --accent-color: #ff9fb2;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background: linear-gradient(135deg, #fff0f5 0%, #e6f7ff 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            color: var(--dark-text);
+            background-image: radial-gradient(#ffffff 20%, transparent 20%), radial-gradient(#ffffff 20%, transparent 20%);
+            background-position: 0 0, 20px 20px;
+            background-size: 40px 40px;
         }
 
-        .quiz-container {
-            background-color: white;
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 183, 197, 0.3);
             width: 90%;
-            max-width: 600px;
+            max-width: 550px;
             text-align: center;
+            border: 5px solid white;
+            position: relative;
+            overflow: hidden;
         }
 
+        /* 裝飾用的小標題 */
         h1 {
-            color: #2c3e50;
-            font-size: 24px;
-            margin-bottom: 20px;
+            color: #ff8ba7;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px #fff;
         }
 
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #7f8c8d;
+        p { color: #8d8d8d; font-weight: bold; }
+
+        /* 首頁選單樣式 */
+        .menu-grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 30px;
         }
 
-        .word-display {
-            font-size: 32px;
-            font-weight: bold;
-            color: #2980b9;
-            margin: 30px 0;
+        .menu-btn {
+            background-color: white;
+            border: 3px solid var(--chiikawa-pink);
+            color: var(--dark-text);
             padding: 20px;
-            background-color: #ecf0f1;
-            border-radius: 10px;
+            font-size: 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            box-shadow: 0 5px 0 var(--chiikawa-pink);
         }
 
+        .menu-btn:hover {
+            transform: translateY(-5px);
+            background-color: var(--chiikawa-pink);
+            color: white;
+            border-color: #ffb7c5;
+        }
+
+        .menu-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 0 0 var(--chiikawa-pink);
+        }
+
+        .menu-btn.secondary {
+            border-color: var(--hachiware-blue);
+            box-shadow: 0 5px 0 var(--hachiware-blue);
+        }
+
+        .menu-btn.secondary:hover {
+            background-color: var(--hachiware-blue);
+            border-color: #badcf5;
+        }
+
+        .btn-icon { font-size: 32px; }
+
+        /* 題目框框 */
+        .question-box {
+            font-size: 26px;
+            font-weight: bold;
+            color: #6b5b5b;
+            margin: 20px 0;
+            padding: 30px;
+            background-color: var(--usagi-yellow);
+            border-radius: 25px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px dashed #ffe082;
+            position: relative;
+        }
+
+        /* 選項按鈕 */
         .options-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 15px;
         }
 
         button.option-btn {
-            background-color: #fff;
-            border: 2px solid #bdc3c7;
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 16px;
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 15px 20px;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.2s;
-            color: #34495e;
+            color: var(--dark-text);
+            text-align: left;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-weight: bold;
         }
 
         button.option-btn:hover:not(:disabled) {
-            background-color: #eef2f3;
-            border-color: #3498db;
+            background-color: #f8f9fa;
+            border-color: var(--hachiware-blue);
+            transform: scale(1.02);
         }
 
         button.option-btn.correct {
-            background-color: #2ecc71;
-            border-color: #27ae60;
-            color: white;
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
         }
 
         button.option-btn.wrong {
-            background-color: #e74c3c;
-            border-color: #c0392b;
-            color: white;
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+            animation: shake 0.4s;
         }
 
-        .next-btn {
+        /* 下一題按鈕 */
+        .nav-btn {
             margin-top: 25px;
-            padding: 12px 30px;
-            background-color: #3498db;
-            color: white;
+            padding: 15px 40px;
+            background-color: var(--chiikawa-pink);
+            color: #6b5b5b;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
             font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            display: none; /* Hidden by default */
+            box-shadow: 0 5px 15px rgba(255, 159, 178, 0.4);
+            transition: transform 0.2s;
         }
 
-        .next-btn:hover {
-            background-color: #2980b9;
+        .nav-btn:hover {
+            transform: scale(1.05);
+            background-color: #ffc2cd;
         }
 
-        .result-screen {
-            display: none;
+        .home-btn {
+            background-color: var(--hachiware-blue);
+            color: #5b7c8f;
         }
 
         .score-display {
-            font-size: 48px;
-            color: #2c3e50;
+            font-size: 56px;
+            color: #ff8ba7;
             margin: 20px 0;
+            font-weight: 800;
         }
 
-        @media (max-width: 500px) {
-            .options-grid {
-                grid-template-columns: 1fr;
-            }
+        /* 可愛的小裝飾 */
+        .cute-decoration {
+            font-size: 50px;
+            margin-bottom: -20px;
+            animation: bounce 2s infinite;
         }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .stats-bar {
+            background-color: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
     </style>
 </head>
 <body>
 
-<div class="quiz-container">
-    <div id="quiz-screen">
+<div class="container">
+    
+    <div id="home-screen" class="screen active">
+        <div class="cute-decoration">🐹✨</div>
+        <h1>吉伊卡哇英語教室</h1>
+        <p>準備好一起討伐單字了嗎？</p>
+        
+        <div class="menu-grid">
+            <button class="menu-btn" onclick="startQuiz('vocab')">
+                <span class="btn-icon">📝</span>
+                <div style="text-align:left">
+                    <div style="font-weight:bold">110 單字挑戰</div>
+                    <div style="font-size:14px; opacity:0.7">配對正確的中文</div>
+                </div>
+            </button>
+            <button class="menu-btn secondary" onclick="startQuiz('paper')">
+                <span class="btn-icon">📄</span>
+                <div style="text-align:left">
+                    <div style="font-weight:bold">測驗卷複習</div>
+                    <div style="font-size:14px; opacity:0.7">文法與填充題</div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <div id="quiz-screen" class="screen">
         <div class="stats-bar">
-            <span id="progress-text">題目: 1 / 110</span>
-            <span id="score-text">得分: 0</span>
+            <span id="progress-text">題號: 1 / 10</span> &nbsp;|&nbsp; 
+            <span id="score-text">分數: 0</span>
         </div>
         
-        <h1>請選擇正確的中文意思</h1>
-        
-        <div class="word-display" id="english-word">Loading...</div>
+        <div class="question-box">
+            <span id="question-display">Loading...</span>
+            <span style="position:absolute; top:-15px; right:-10px; font-size:30px;">🐰</span>
+        </div>
         
         <div class="options-grid" id="options-container">
             </div>
 
-        <button class="next-btn" id="next-btn" onclick="nextQuestion()">下一題</button>
+        <button class="nav-btn" id="next-btn" style="display:none" onclick="nextQuestion()">
+            下一題 Yaha! ➔
+        </button>
     </div>
 
-    <div id="result-screen" class="result-screen">
-        <h1>測驗結束!</h1>
-        <p>你的最終成績是：</p>
-        <div class="score-display" id="final-score">0 / 110</div>
-        <p id="feedback-msg"></p>
-        <button class="next-btn" style="display:inline-block" onclick="restartQuiz()">重新開始</button>
+    <div id="result-screen" class="screen">
+        <div class="cute-decoration">🎊</div>
+        <h1>討伐完成!</h1>
+        <div class="score-display" id="final-score">0 / 0</div>
+        <p id="feedback-msg" style="font-size: 18px; color: #6b5b5b;"></p>
+        
+        <div style="display:flex; gap:10px; justify-content: center; margin-top:20px;">
+            <button class="nav-btn home-btn" onclick="goHome()">🏠 回首頁</button>
+            <button class="nav-btn" onclick="restartCurrentQuiz()">🔄 再玩一次</button>
+        </div>
     </div>
+
 </div>
 
 <script>
-    // 110 個單字與對應的中文意思
-    const vocabularyList = [
-        { en: "Affect", zh: "情感 / 影響" },
-        { en: "Cognition", zh: "認知" },
-        { en: "Analytical", zh: "分析的" },
-        { en: "Intuitive", zh: "直覺的" },
-        { en: "Attitude", zh: "態度" },
-        { en: "Bargaining power", zh: "議價能力 / 討價還價能力" },
-        { en: "Behaviourism", zh: "行為主義" },
-        { en: "Bonding", zh: "連結 / 親密關係" },
-        { en: "Capitalism", zh: "資本主義" },
-        { en: "Chaos", zh: "混亂 (名詞)" },
-        { en: "Chaotic", zh: "混亂的 (形容詞)" },
-        { en: "Character", zh: "性格 / 品格" },
-        { en: "Civil society", zh: "公民社會" },
-        { en: "Cognitive psychology", zh: "認知心理學" },
-        { en: "Complain", zh: "抱怨" },
-        { en: "Conscious", zh: "有意識的" },
-        { en: "Unconscious", zh: "無意識的 / 潛意識" },
-        { en: "Desire to be liked", zh: "渴望被喜愛" },
-        { en: "Desire to be right", zh: "渴望正確" },
-        { en: "Desire to be unique", zh: "渴望獨特" },
-        { en: "Despair", zh: "絕望" },
-        { en: "Hope", zh: "希望" },
-        { en: "Discrimination", zh: "歧視" },
-        { en: "Disgust", zh: "厭惡" },
-        { en: "Dream", zh: "夢想 / 夢" },
-        { en: "Nightmare", zh: "惡夢" },
-        { en: "Duty", zh: "責任 / 義務" },
-        { en: "Encouragement", zh: "鼓勵" },
-        { en: "Envy", zh: "嫉妒 / 羨慕" },
-        { en: "Environment", zh: "環境" },
-        { en: "Ethnic", zh: "種族的 / 民族的" },
-        { en: "Expectations", zh: "期望" },
-        { en: "Famine", zh: "饑荒" },
-        { en: "Female", zh: "女性" },
-        { en: "Male", zh: "男性" },
-        { en: "Feminine", zh: "女性化的 / 陰柔的" },
-        { en: "Masculine", zh: "男性化的 / 陽剛的" },
-        { en: "Gender", zh: "性別 (社會性別)" },
-        { en: "Globalization", zh: "全球化" },
-        { en: "Grassroots", zh: "草根 / 基層" },
-        { en: "Group pressure", zh: "群體壓力" },
-        { en: "Groupthink", zh: "群體迷思" },
-        { en: "Hatred", zh: "仇恨" },
-        { en: "Hero", zh: "英雄" },
-        { en: "Idol", zh: "偶像" },
-        { en: "Honest", zh: "誠實的" },
-        { en: "Truthful", zh: "真實的 / 誠實的" },
-        { en: "Human rights", zh: "人權" },
-        { en: "Idealistic", zh: "理想主義的" },
-        { en: "Realistic", zh: "現實主義的 / 實際的" },
-        { en: "Immigrants", zh: "移民" },
-        { en: "Initiative", zh: "主動性 / 倡議" },
-        { en: "Instinct", zh: "本能 / 直覺" },
-        { en: "Institutions", zh: "機構 / 制度" },
-        { en: "Intuition", zh: "直覺" },
-        { en: "Label", zh: "標籤" },
-        { en: "Liberalism", zh: "自由主義" },
-        { en: "Mature", zh: "成熟的" },
-        { en: "Immature", zh: "不成熟的" },
-        { en: "Mental illness", zh: "精神疾病" },
-        { en: "Miracle", zh: "奇蹟" },
-        { en: "Motive", zh: "動機" },
-        { en: "Natural disasters", zh: "自然災害" },
-        { en: "Norm (Social norm)", zh: "規範 (社會規範)" },
-        { en: "Oppressed", zh: "受壓迫的" },
-        { en: "Oppression", zh: "壓迫" },
-        { en: "Overcome", zh: "克服" },
-        { en: "Personality", zh: "個性 / 人格" },
-        { en: "Phenomenon", zh: "現象" },
-        { en: "Pity", zh: "憐憫 / 同情" },
-        { en: "Polite", zh: "有禮貌的" },
-        { en: "Impolite/rude", zh: "無禮的 / 粗魯的" },
-        { en: "Poverty", zh: "貧窮" },
-        { en: "Precious", zh: "珍貴的" },
-        { en: "Predict", zh: "預測" },
-        { en: "Prejudice", zh: "偏見" },
-        { en: "Priority", zh: "優先事項" },
-        { en: "Protect", zh: "保護" },
-        { en: "Psychiatry", zh: "精神病學" },
-        { en: "Refugee", zh: "難民" },
-        { en: "Rely", zh: "依賴 / 信賴" },
-        { en: "Respect", zh: "尊重" },
-        { en: "Disrespect", zh: "不尊重" },
-        { en: "Responsible", zh: "負責任的" },
-        { en: "Irresponsible", zh: "不負責任的" },
-        { en: "Role model", zh: "榜樣" },
-        { en: "Self-confidence", zh: "自信" },
-        { en: "Self-esteem", zh: "自尊" },
-        { en: "Sensible", zh: "明智的 / 合情理的" },
-        { en: "Social change", zh: "社會變遷" },
-        { en: "Social development", zh: "社會發展" },
-        { en: "Social Justice", zh: "社會正義" },
-        { en: "Social Welfare", zh: "社會福利" },
-        { en: "Socialism", zh: "社會主義" },
-        { en: "Stereotype", zh: "刻板印象" },
-        { en: "Stress", zh: "壓力 (生理/心理)" },
-        { en: "Pressure", zh: "壓力 (外部/物理)" },
-        { en: "Support", zh: "支持" },
-        { en: "Tactful", zh: "圓滑的 / 機智的" },
-        { en: "Terrorism", zh: "恐怖主義" },
-        { en: "Triad", zh: "三合會 / 黑社會" },
-        { en: "Troublesome", zh: "令人煩惱的 / 麻煩的" },
-        { en: "Understanding", zh: "理解 / 體諒" },
-        { en: "Values", zh: "價值觀" },
-        { en: "Virtues", zh: "美德" },
-        { en: "Vulnerable", zh: "脆弱的 / 易受傷的" },
-        { en: "Wanted", zh: "被通緝的 / 被需要的" },
-        { en: "Unwanted", zh: "不需要的 / 討人厭的" },
-        { en: "Well-being", zh: "福祉 / 健康快樂" },
-        { en: "Wise", zh: "明智的 / 有智慧的" }
+    /* ================= 資料庫 (保持不變) ================= */
+
+    // 1. 單字資料庫
+    const vocabList = [
+        { en: "Affect", zh: "情感 / 影響" }, { en: "Cognition", zh: "認知" }, { en: "Analytical", zh: "分析的" },
+        { en: "Intuitive", zh: "直覺的" }, { en: "Attitude", zh: "態度" }, { en: "Bargaining power", zh: "議價能力" },
+        { en: "Behaviourism", zh: "行為主義" }, { en: "Bonding", zh: "連結 / 親密關係" }, { en: "Capitalism", zh: "資本主義" },
+        { en: "Chaos", zh: "混亂 (名詞)" }, { en: "Chaotic", zh: "混亂的 (形容詞)" }, { en: "Character", zh: "性格 / 品格" },
+        { en: "Civil society", zh: "公民社會" }, { en: "Cognitive psychology", zh: "認知心理學" }, { en: "Complain", zh: "抱怨" },
+        { en: "Conscious", zh: "有意識的" }, { en: "Unconscious", zh: "無意識的 / 潛意識" }, { en: "Desire to be liked", zh: "渴望被喜愛" },
+        { en: "Desire to be right", zh: "渴望正確" }, { en: "Desire to be unique", zh: "渴望獨特" }, { en: "Despair", zh: "絕望" },
+        { en: "Hope", zh: "希望" }, { en: "Discrimination", zh: "歧視" }, { en: "Disgust", zh: "厭惡" },
+        { en: "Dream", zh: "夢想 / 夢" }, { en: "Nightmare", zh: "惡夢" }, { en: "Duty", zh: "責任 / 義務" },
+        { en: "Encouragement", zh: "鼓勵" }, { en: "Envy", zh: "嫉妒 / 羨慕" }, { en: "Environment", zh: "環境" },
+        { en: "Ethnic", zh: "種族的" }, { en: "Expectations", zh: "期望" }, { en: "Famine", zh: "饑荒" },
+        { en: "Female", zh: "女性" }, { en: "Male", zh: "男性" }, { en: "Feminine", zh: "女性化的" },
+        { en: "Masculine", zh: "男性化的" }, { en: "Gender", zh: "性別" }, { en: "Globalization", zh: "全球化" },
+        { en: "Grassroots", zh: "草根 / 基層" }, { en: "Group pressure", zh: "群體壓力" }, { en: "Groupthink", zh: "群體迷思" },
+        { en: "Hatred", zh: "仇恨" }, { en: "Hero", zh: "英雄" }, { en: "Idol", zh: "偶像" },
+        { en: "Honest", zh: "誠實的" }, { en: "Truthful", zh: "真實的" }, { en: "Human rights", zh: "人權" },
+        { en: "Idealistic", zh: "理想主義的" }, { en: "Realistic", zh: "現實主義的" }, { en: "Immigrants", zh: "移民" },
+        { en: "Initiative", zh: "主動性" }, { en: "Instinct", zh: "本能 / 直覺" }, { en: "Institutions", zh: "機構 / 制度" },
+        { en: "Intuition", zh: "直覺" }, { en: "Label", zh: "標籤" }, { en: "Liberalism", zh: "自由主義" },
+        { en: "Mature", zh: "成熟的" }, { en: "Immature", zh: "不成熟的" }, { en: "Mental illness", zh: "精神疾病" },
+        { en: "Miracle", zh: "奇蹟" }, { en: "Motive", zh: "動機" }, { en: "Natural disasters", zh: "自然災害" },
+        { en: "Norm", zh: "規範" }, { en: "Oppressed", zh: "受壓迫的" }, { en: "Oppression", zh: "壓迫" },
+        { en: "Overcome", zh: "克服" }, { en: "Personality", zh: "個性" }, { en: "Phenomenon", zh: "現象" },
+        { en: "Pity", zh: "憐憫 / 同情" }, { en: "Polite", zh: "有禮貌的" }, { en: "Impolite", zh: "無禮的" },
+        { en: "Poverty", zh: "貧窮" }, { en: "Precious", zh: "珍貴的" }, { en: "Predict", zh: "預測" },
+        { en: "Prejudice", zh: "偏見" }, { en: "Priority", zh: "優先事項" }, { en: "Protect", zh: "保護" },
+        { en: "Psychiatry", zh: "精神病學" }, { en: "Refugee", zh: "難民" }, { en: "Rely", zh: "依賴" },
+        { en: "Respect", zh: "尊重" }, { en: "Disrespect", zh: "不尊重" }, { en: "Responsible", zh: "負責任的" },
+        { en: "Irresponsible", zh: "不負責任的" }, { en: "Role model", zh: "榜樣" }, { en: "Self-confidence", zh: "自信" },
+        { en: "Self-esteem", zh: "自尊" }, { en: "Sensible", zh: "明智的" }, { en: "Social change", zh: "社會變遷" },
+        { en: "Social development", zh: "社會發展" }, { en: "Social Justice", zh: "社會正義" }, { en: "Social Welfare", zh: "社會福利" },
+        { en: "Socialism", zh: "社會主義" }, { en: "Stereotype", zh: "刻板印象" }, { en: "Stress", zh: "壓力" },
+        { en: "Pressure", zh: "壓力(外部)" }, { en: "Support", zh: "支持" }, { en: "Tactful", zh: "圓滑的" },
+        { en: "Terrorism", zh: "恐怖主義" }, { en: "Triad", zh: "三合會" }, { en: "Troublesome", zh: "令人煩惱的" },
+        { en: "Understanding", zh: "理解" }, { en: "Values", zh: "價值觀" }, { en: "Virtues", zh: "美德" },
+        { en: "Vulnerable", zh: "脆弱的" }, { en: "Wanted", zh: "被通緝的" }, { en: "Unwanted", zh: "不需要的" },
+        { en: "Well-being", zh: "福祉" }, { en: "Wise", zh: "明智的" }
     ];
 
-    let currentQuestions = [];
-    let currentQuestionIndex = 0;
+    // 2. 測驗卷資料庫
+    const paperList = [
+        { q: "My father gave me ______ good advice on finding a job.", options: ["some", "many", "an", "few"], ans: "some" },
+        { q: "How ______ gifts did you receive last Christmas?", options: ["many", "much", "any", "little"], ans: "many" },
+        { q: "Tom doesn't have ______ money on him.", options: ["much", "many", "some", "a"], ans: "much" },
+        { q: "There aren't ______ desks in the classroom.", options: ["any", "some", "much", "none"], ans: "any" },
+        { q: "Our parents never ______ (smoke) in front of us.", options: ["smoke", "smokes", "smoking", "smoked"], ans: "smoke" },
+        { q: "The students sometimes ______ (not pay) attention to their teacher.", options: ["don't pay", "doesn't pay", "not pay", "aren't pay"], ans: "don't pay" },
+        { q: "We ______ (go) to France for two months last year.", options: ["went", "go", "gone", "going"], ans: "went" },
+        { q: "______ (be) your wife a doctor?", options: ["Is", "Are", "Does", "Do"], ans: "Is" },
+        { q: "Yes, she ______ (be).", options: ["is", "are", "does", "has"], ans: "is" },
+        { q: "______ people we met last night were really helpful.", options: ["Those", "That", "This", "They"], ans: "Those" },
+        { q: "Look at ______ pictures over there.", options: ["those", "these", "this", "that"], ans: "those" },
+        { q: "The firefighter who saved three children is a real ______.", options: ["hero", "male", "idol", "truthful"], ans: "hero" },
+        { q: "Illegal ______ are sent back across the border if caught.", options: ["immigrants", "idols", "humans", "tourists"], ans: "immigrants" },
+        { q: "Remember to put an address ______ on the suitcase.", options: ["label", "liberal", "intuition", "paper"], ans: "label" },
+        { q: "She worked very hard to ______ her fear of speaking.", options: ["overcome", "priority", "polite", "motive"], ans: "overcome" },
+        { q: "In Africa, many families live in ______.", options: ["poverty", "refugee", "pity", "wealth"], ans: "poverty" },
+        { q: "He studied ______ to understand how the human mind works.", options: ["psychiatry", "refugee", "motive", "biology"], ans: "psychiatry" },
+        { q: "Being ______ in interviews builds trust.", options: ["truthful", "mature", "groupthink", "rich"], ans: "truthful" },
+        { q: "A severe shortage of food caused by disaster is called ______.", options: ["famine", "ethnic", "envy", "disgust"], ans: "famine" },
+        { q: "Relating to a particular race of people is called ______.", options: ["ethnic", "grassroots", "feminine", "environment"], ans: "ethnic" }
+    ];
+
+    /* ================= 遊戲邏輯 ================= */
+    
+    let currentMode = ''; 
+    let quizData = [];
+    let currentIndex = 0;
     let score = 0;
     let isAnswered = false;
 
-    // 洗牌算法 (Fisher-Yates Shuffle)
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
     }
 
-    function initQuiz() {
-        // 複製一份列表並隨機打亂，這樣每次測驗順序都不同
-        currentQuestions = shuffleArray([...vocabularyList]); 
-        currentQuestionIndex = 0;
+    function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    function startQuiz(mode) {
+        currentMode = mode;
+        currentIndex = 0;
         score = 0;
-        isAnswered = false;
         
-        document.getElementById('quiz-screen').style.display = 'block';
-        document.getElementById('result-screen').style.display = 'none';
-        
+        if (mode === 'vocab') {
+            quizData = shuffle([...vocabList]);
+        } else {
+            quizData = shuffle([...paperList]);
+        }
+
+        showScreen('quiz-screen');
         loadQuestion();
     }
 
     function loadQuestion() {
-        if (currentQuestionIndex >= currentQuestions.length) {
-            showResult();
+        if (currentIndex >= quizData.length) {
+            endQuiz();
             return;
         }
 
         isAnswered = false;
-        const currentData = currentQuestions[currentQuestionIndex];
-        
-        // 更新進度與分數
-        document.getElementById('progress-text').innerText = `題目: ${currentQuestionIndex + 1} / ${currentQuestions.length}`;
-        document.getElementById('score-text').innerText = `得分: ${score}`;
-        document.getElementById('english-word').innerText = currentData.en;
-        document.getElementById('next-btn').style.display = 'none';
+        const data = quizData[currentIndex];
+        const uiQuestion = document.getElementById('question-display');
+        const uiOptions = document.getElementById('options-container');
+        const nextBtn = document.getElementById('next-btn');
 
-        // 生成選項
-        const optionsContainer = document.getElementById('options-container');
-        optionsContainer.innerHTML = '';
+        document.getElementById('progress-text').innerText = `題號: ${currentIndex + 1} / ${quizData.length}`;
+        document.getElementById('score-text').innerText = `分數: ${score}`;
+        nextBtn.style.display = 'none';
+        uiOptions.innerHTML = '';
 
-        // 1. 加入正確答案
-        let options = [{ text: currentData.zh, isCorrect: true }];
-
-        // 2. 加入3個錯誤答案 (從列表中隨機抽取，不能與正確答案相同)
-        while (options.length < 4) {
-            const randomWord = vocabularyList[Math.floor(Math.random() * vocabularyList.length)];
-            // 確保錯誤選項不重複，且不等於正確答案
-            const isDuplicate = options.some(opt => opt.text === randomWord.zh);
-            if (!isDuplicate && randomWord.zh !== currentData.zh) {
-                options.push({ text: randomWord.zh, isCorrect: false });
+        if (currentMode === 'vocab') {
+            uiQuestion.innerText = data.en;
+            let options = [{ text: data.zh, correct: true }];
+            while (options.length < 4) {
+                let randomItem = vocabList[Math.floor(Math.random() * vocabList.length)];
+                if (!options.some(o => o.text === randomItem.zh)) {
+                    options.push({ text: randomItem.zh, correct: false });
+                }
             }
+            renderButtons(shuffle(options));
+        } else {
+            uiQuestion.innerText = data.q;
+            let options = data.options.map(opt => ({
+                text: opt,
+                correct: opt === data.ans
+            }));
+            renderButtons(shuffle(options));
         }
+    }
 
-        // 3. 打亂選項順序 (A, B, C, D)
-        options = shuffleArray(options);
-
-        // 4. 渲染按鈕
+    function renderButtons(options) {
+        const container = document.getElementById('options-container');
         options.forEach(opt => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
             btn.innerText = opt.text;
-            btn.onclick = () => checkAnswer(btn, opt.isCorrect);
-            optionsContainer.appendChild(btn);
+            btn.onclick = () => checkAnswer(btn, opt.correct);
+            container.appendChild(btn);
         });
     }
 
-    function checkAnswer(selectedBtn, isCorrect) {
-        if (isAnswered) return; // 防止重複點擊
+    function checkAnswer(btn, isCorrect) {
+        if (isAnswered) return;
         isAnswered = true;
 
-        const buttons = document.querySelectorAll('.option-btn');
+        const allBtns = document.querySelectorAll('.option-btn');
         
         if (isCorrect) {
-            selectedBtn.classList.add('correct');
+            btn.classList.add('correct');
             score++;
-            document.getElementById('score-text').innerText = `得分: ${score}`;
+            document.getElementById('score-text').innerText = `分數: ${score}`;
         } else {
-            selectedBtn.classList.add('wrong');
-            // 顯示正確答案是哪一個
-            buttons.forEach(btn => {
-                // 這裡透過比對文字內容來找正確答案
-                const currentWord = currentQuestions[currentQuestionIndex];
-                if (btn.innerText === currentWord.zh) {
-                    btn.classList.add('correct');
+            btn.classList.add('wrong');
+            allBtns.forEach(b => {
+                if (currentMode === 'vocab') {
+                   if(b.innerText === quizData[currentIndex].zh) b.classList.add('correct');
+                } else {
+                   if(b.innerText === quizData[currentIndex].ans) b.classList.add('correct');
                 }
             });
         }
 
-        // 禁用所有按鈕
-        buttons.forEach(btn => btn.disabled = true);
-        
-        // 顯示下一題按鈕
+        allBtns.forEach(b => b.disabled = true);
         document.getElementById('next-btn').style.display = 'inline-block';
     }
 
     function nextQuestion() {
-        currentQuestionIndex++;
+        currentIndex++;
         loadQuestion();
     }
 
-    function showResult() {
-        document.getElementById('quiz-screen').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('final-score').innerText = `${score} / ${currentQuestions.length}`;
+    function endQuiz() {
+        showScreen('result-screen');
+        document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
         
         let msg = "";
-        const percentage = (score / currentQuestions.length) * 100;
-        if (percentage === 100) msg = "太神了！滿分！";
-        else if (percentage >= 90) msg = "非常優秀！";
-        else if (percentage >= 70) msg = "做得不錯，繼續保持！";
-        else msg = "再接再厲，多練習幾次吧！";
+        let pct = score / quizData.length;
+        if (pct === 1) msg = "哇！太厲害了！完全勝利！🎉";
+        else if (pct >= 0.8) msg = "很棒耶！差一點點就滿分了！✨";
+        else if (pct >= 0.6) msg = "還不錯喔！繼續加油！💪";
+        else msg = "別灰心，再一次挑戰吧！🥺";
         
         document.getElementById('feedback-msg').innerText = msg;
     }
 
-    function restartQuiz() {
-        initQuiz();
+    function goHome() {
+        showScreen('home-screen');
     }
 
-    // 啟動程式
-    initQuiz();
+    function restartCurrentQuiz() {
+        startQuiz(currentMode);
+    }
 
 </script>
 
