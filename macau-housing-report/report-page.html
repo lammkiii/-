@@ -1,0 +1,868 @@
+<title>澳門房屋問題研習</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root {
+    --ground: #eef1f4;
+    --surface: #ffffff;
+    --surface-sunk: #e7ebef;
+    --ink: #151a20;
+    --ink-soft: #545e69;
+    --ink-faint: #7d8792;
+    --rule: #cdd5dd;
+    --rule-soft: #dfe5ea;
+    --azulejo: #1d4e75;
+    --azulejo-soft: #d9e6f0;
+    --ochre: #7d6017;
+    --ochre-soft: #f2e9d0;
+    --ochre-rule: #c9a94e;
+    --celadon: #35604f;
+    --celadon-soft: #dceae4;
+    --brick: #8a4436;
+
+    --f-display: "Noto Serif TC", "Songti TC", "MingLiU", serif;
+    --f-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    --f-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+    --wrap: 46rem;
+    --step--1: 0.8125rem;
+    --step-0: 1rem;
+    --step-1: 1.1875rem;
+    --step-2: 1.5rem;
+    --step-3: 2rem;
+    --step-4: 2.75rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #10141a;
+      --surface: #181e26;
+      --surface-sunk: #131922;
+      --ink: #e4e9ee;
+      --ink-soft: #9ba6b2;
+      --ink-faint: #77828e;
+      --rule: #2c3644;
+      --rule-soft: #232c37;
+      --azulejo: #77aed6;
+      --azulejo-soft: #1b2d3d;
+      --ochre: #d8b263;
+      --ochre-soft: #2c2517;
+      --ochre-rule: #7d6529;
+      --celadon: #83b8a5;
+      --celadon-soft: #17251f;
+      --brick: #c9796a;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #10141a;
+    --surface: #181e26;
+    --surface-sunk: #131922;
+    --ink: #e4e9ee;
+    --ink-soft: #9ba6b2;
+    --ink-faint: #77828e;
+    --rule: #2c3644;
+    --rule-soft: #232c37;
+    --azulejo: #77aed6;
+    --azulejo-soft: #1b2d3d;
+    --ochre: #d8b263;
+    --ochre-soft: #2c2517;
+    --ochre-rule: #7d6529;
+    --celadon: #83b8a5;
+    --celadon-soft: #17251f;
+    --brick: #c9796a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding-inline: 20px;
+    padding-block: 0 5rem;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: var(--step-0);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--wrap); margin-inline: auto; }
+  .wide { max-width: 60rem; margin-inline: auto; }
+
+  /* ---- masthead ---- */
+  header.mast {
+    max-width: 60rem;
+    margin-inline: auto;
+    padding-block: 3.5rem 2rem;
+    border-bottom: 2px solid var(--ink);
+  }
+  .eyebrow {
+    font-family: var(--f-data);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--azulejo);
+    margin: 0 0 1rem;
+  }
+  h1 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: var(--step-4);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 1.25rem;
+  }
+  .mast-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .mast-meta b {
+    font-family: var(--f-data);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ---- sections ---- */
+  section { padding-block: 3rem 0; }
+  .sec-head {
+    max-width: 60rem;
+    margin-inline: auto;
+    display: flex;
+    align-items: baseline;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .sec-num {
+    font-family: var(--f-data);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+  h2 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: var(--step-2);
+    line-height: 1.3;
+    margin: 0;
+    flex: 1 1 auto;
+  }
+  .marks {
+    font-family: var(--f-data);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--azulejo);
+    background: var(--azulejo-soft);
+    padding: 0.2rem 0.55rem;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .marks.heavy { color: var(--surface); background: var(--azulejo); }
+
+  h3 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: var(--step-1);
+    line-height: 1.4;
+    margin: 2.25rem 0 0.5rem;
+  }
+  h4 {
+    font-family: var(--f-body);
+    font-weight: 700;
+    font-size: var(--step-0);
+    margin: 1.75rem 0 0.375rem;
+  }
+  p { margin: 0 0 1rem; }
+  .lede { font-size: var(--step-1); line-height: 1.65; color: var(--ink-soft); }
+
+  /* ---- corrections notice ---- */
+  .notice {
+    max-width: 60rem;
+    margin: 2.5rem auto 0;
+    background: var(--ochre-soft);
+    border: 1px solid var(--ochre-rule);
+    border-left-width: 4px;
+    padding: 1.5rem 1.75rem;
+  }
+  .notice h2 {
+    font-size: var(--step-1);
+    color: var(--ochre);
+    margin-bottom: 0.75rem;
+  }
+  .notice ol { margin: 0; padding-left: 1.4rem; }
+  .notice li { margin-bottom: 0.75rem; }
+  .notice li:last-child { margin-bottom: 0; }
+  .notice li > b { color: var(--ink); }
+
+  /* ---- tables ---- */
+  .t-scroll { overflow-x: auto; margin: 1.25rem 0 1.5rem; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--step--1);
+    min-width: 30rem;
+  }
+  caption {
+    text-align: left;
+    font-family: var(--f-data);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-bottom: 0.625rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.5rem 0.875rem 0.5rem 0;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: baseline;
+  }
+  thead th {
+    font-weight: 700;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    white-space: nowrap;
+  }
+  td.num, th.num {
+    text-align: right;
+    font-family: var(--f-data);
+    font-variant-numeric: tabular-nums;
+    padding-right: 0;
+  }
+  tbody tr:last-child td { border-bottom: 1px solid var(--rule); }
+  tr.total td { font-weight: 700; border-top: 1px solid var(--rule); }
+  .fall { color: var(--brick); font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+
+  /* ---- figure / chart ---- */
+  figure { margin: 1.75rem 0; }
+  figcaption {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    margin-top: 0.75rem;
+    line-height: 1.6;
+  }
+  .chart { display: block; width: 100%; height: auto; max-width: 100%; }
+  .c-label { font-family: var(--f-body); font-size: 11px; fill: var(--ink); }
+  .c-value { font-family: var(--f-data); font-size: 11px; font-weight: 600; fill: var(--ink); }
+  .c-value.on-bar { fill: #ffffff; }
+  .c-axis { font-family: var(--f-data); font-size: 10px; fill: var(--ink-faint); }
+  .c-rule { stroke: var(--rule-soft); stroke-width: 1; }
+
+  /* ---- calculation block ---- */
+  .calc {
+    background: var(--surface-sunk);
+    border: 1px solid var(--rule-soft);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    font-family: var(--f-data);
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+    line-height: 2;
+    overflow-x: auto;
+  }
+  .calc .row { display: flex; gap: 1rem; justify-content: space-between; white-space: nowrap; }
+  .calc .row span:first-child { color: var(--ink-soft); }
+  .calc .out {
+    border-top: 1px solid var(--rule);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    font-weight: 600;
+  }
+  .calc .out span:last-child { color: var(--azulejo); font-size: var(--step-0); }
+
+  /* ---- definition list ---- */
+  dl.concepts { margin: 1.5rem 0 0; }
+  dl.concepts dt {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: var(--step-1);
+    margin-top: 1.75rem;
+  }
+  dl.concepts dt:first-child { margin-top: 0; }
+  dl.concepts dt .en {
+    font-family: var(--f-data);
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+  }
+  dl.concepts dd { margin: 0.375rem 0 0; color: var(--ink-soft); }
+
+  /* ---- numbered analysis items ---- */
+  .item { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--rule-soft); }
+  .item:first-of-type { border-top: 0; padding-top: 0; }
+  .item-kicker {
+    font-family: var(--f-data);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--celadon);
+    margin: 0 0 0.25rem;
+  }
+  .item h3 { margin-top: 0; }
+
+  /* ---- verify callout ---- */
+  .verify {
+    background: var(--surface);
+    border: 1px solid var(--ochre-rule);
+    padding: 1.375rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .verify h4 { margin-top: 0; color: var(--ochre); }
+  .verify ul { margin: 0; padding-left: 1.25rem; font-size: var(--step--1); color: var(--ink-soft); }
+  .verify li { margin-bottom: 0.625rem; }
+  .verify li:last-child { margin-bottom: 0; }
+
+  /* ---- interview Q list ---- */
+  .qgroup { margin-top: 1.5rem; }
+  .qgroup > p.qlabel {
+    font-family: var(--f-data);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--azulejo);
+    margin-bottom: 0.5rem;
+  }
+  ol.qs { margin: 0; padding-left: 1.5rem; }
+  ol.qs li { margin-bottom: 0.5rem; }
+
+  /* ---- references ---- */
+  ol.refs { font-size: var(--step--1); padding-left: 1.75rem; color: var(--ink-soft); }
+  ol.refs li { margin-bottom: 0.625rem; }
+  ol.refs b { color: var(--ink); font-weight: 500; }
+  .ref-group {
+    font-family: var(--f-data);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 1.75rem 0 0.625rem;
+  }
+
+  /* ---- todo ---- */
+  ol.todo { margin: 1.25rem 0 0; padding-left: 1.5rem; }
+  ol.todo li { margin-bottom: 0.875rem; }
+  ol.todo b { font-weight: 700; }
+
+  ul.plain { margin: 0.5rem 0 1rem; padding-left: 1.25rem; color: var(--ink-soft); }
+  ul.plain li { margin-bottom: 0.375rem; }
+
+  code {
+    font-family: var(--f-data);
+    font-size: 0.9em;
+    background: var(--surface-sunk);
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+  }
+
+  footer {
+    max-width: 60rem;
+    margin: 4rem auto 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 34rem) {
+    :root { --step-4: 2rem; --step-3: 1.625rem; --step-2: 1.3125rem; }
+    header.mast { padding-block: 2.5rem 1.5rem; }
+    .notice, .verify { padding: 1.125rem 1.25rem; }
+    .calc { padding: 1rem 1.125rem; }
+  }
+</style>
+
+<header class="mast">
+  <p class="eyebrow">當代社會問題 · 小組研習報告</p>
+  <h1>澳門房屋問題研習</h1>
+  <ul class="mast-meta">
+    <li>澳門理工大學 人文及社會科學學院 社會工作學課程</li>
+    <li>指定理論 <b>馬克思理論</b></li>
+    <li>匯報 <b>45 分鐘</b></li>
+    <li>PowerPoint <b>≥ 30 頁</b></li>
+    <li>佔總成績 <b>40%</b></li>
+  </ul>
+</header>
+
+<div class="notice">
+  <h2>兩項必須先更正的認知</h2>
+  <ol>
+    <li><b>交付物是 PowerPoint，不是 Word 論文。</b>Guideline 明文要求「使用 Powerpoint note，而內容須有 30 頁或以上」。文字內容本身仍用中文全角標點、純文字無 Markdown 符號，但版面單位是投影片頁，不是章節頁。</li>
+    <li><b>章節結構不是 IMRaD。</b>Guideline 指定五大部分，評分表逐項對應這五部分。Introduction / Method / Results / Discussion 套不進去，硬套會直接失分。</li>
+  </ol>
+</div>
+
+<section>
+  <div class="sec-head">
+    <span class="sec-num">預算</span>
+    <h2>評分表反推的頁數分配</h2>
+  </div>
+  <div class="wide">
+    <p>五十分裡有三十五分（七成）集中在「現況與數據」及「社會因素＋理論」兩塊。概念定義與紓解措施做到合格即可，時間要押在前兩塊。</p>
+    <div class="t-scroll">
+      <table>
+        <caption>Guideline 指定內容 × 評分權重 × 建議頁數</caption>
+        <thead>
+          <tr><th>指定內容</th><th class="num">分數</th><th class="num">建議頁數</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>完整內容結構（封面、目錄、小結）</td><td class="num">5</td><td class="num">3–4</td></tr>
+          <tr><td>現況和趨勢，須提供充足資料數據（近 5 年）</td><td class="num">15</td><td class="num">11–13</td></tr>
+          <tr><td>社會因素 3–4 個，並應用社會學理論作精確解釋</td><td class="num">20</td><td class="num">10–12</td></tr>
+          <tr><td>純熟報告技巧（口頭演練，非頁數）</td><td class="num">10</td><td class="num">—</td></tr>
+          <tr><td>訪問交代 + 參考文獻</td><td class="num">—</td><td class="num">3</td></tr>
+          <tr class="total"><td>合計</td><td class="num">50</td><td class="num">32–38</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="sec-num">第一部分</span>
+    <h2>主要概念</h2>
+    <span class="marks">5 個</span>
+  </div>
+  <div class="wrap">
+    <p>Guideline 要求解釋 4 至 5 個相關主要概念。課堂上老師特別點名「都市更新」必須有。</p>
+    <dl class="concepts">
+      <dt>房屋問題 <span class="en">Housing Problem</span></dt>
+      <dd>住房的供給、分配、可負擔性與居住質素未能滿足社會成員基本居住需要而形成的結構性問題。與個別家庭的居住困難之別在於：其成因在社會結構而非個人選擇，且影響特定社會群體而非個別人士。</dd>
+
+      <dt>住房可負擔性 <span class="en">Housing Affordability</span></dt>
+      <dd>家庭在維持其他基本生活開支的前提下取得合適住房的能力。國際常用樓價收入比量度，即住宅價格中位數除以家庭年收入中位數，數值代表一個家庭在不消費的假設下需工作多少年方能購入住宅。國際慣例視 3 至 6 倍為合理區間。</dd>
+
+      <dt>都市更新 <span class="en">Urban Renewal</span></dt>
+      <dd>對建築老化、設施落後、居住環境惡化的舊有城區進行重建、維修保養、保存及活化的規劃行為。澳門的政策概念歷經三屆政府演變，由「舊區重整」轉為「都市更新」，現行法律依據為第 18/2022 號法律《都市更新法律制度》。</dd>
+
+      <dt>階梯房屋政策 <span class="en">Stepped Housing Policy</span></dt>
+      <dd>澳門現行的分層住房供應框架，由社會房屋、經濟房屋、夾心階層住房、私人房屋及長者公寓構成，針對不同收入水平的居民提供對應選項，目標是使住房需求沿階梯逐級上移。</dd>
+
+      <dt>夾心階層 <span class="en">Sandwich Class</span></dt>
+      <dd>收入及資產超出社會房屋與經濟房屋的申請上限，卻不足以負擔私人住宅市場價格的家庭。其結構位置決定他們同時被公共房屋體系與市場機制排除，是階梯房屋政策中最易「斷鏈」的一環。</dd>
+    </dl>
+    <p style="margin-top:1.5rem;color:var(--ink-soft);font-size:var(--step--1)">備用概念：<b>三無大廈</b>（無業主會、無管理公司、無維修基金的樓宇）；<b>仕紳化</b>（Gentrification，舊區更新後租金物價上升、原低收入居民被迫遷離的過程）—— 後者在馬克思理論部分會再用到。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="sec-num">第二部分</span>
+    <h2>澳門現況與趨勢</h2>
+    <span class="marks heavy">15 分</span>
+  </div>
+  <div class="wide">
+    <p class="lede">核心發現與直覺相反：澳門樓價近年顯著下跌，並非持續上升。但可負擔性並未因此改善，因為收入中位數同期亦在下跌。這個張力是本報告最有力的論點。</p>
+
+    <h3>問題一　私樓樓價過高，年輕人難以置業</h3>
+
+    <div class="t-scroll">
+      <table>
+        <caption>住宅單位每平方米實用面積平均價格，2025 年全年（澳門元）</caption>
+        <thead>
+          <tr><th>類別</th><th class="num">2025 年</th><th class="num">按年變化</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>整體住宅</td><td class="num">70,935</td><td class="num fall">−16.7%</td></tr>
+          <tr><td>澳門半島</td><td class="num">68,894</td><td class="num fall">−12.5%</td></tr>
+          <tr><td>氹仔</td><td class="num">72,971</td><td class="num fall">−22.3%</td></tr>
+          <tr><td>路環</td><td class="num">81,500</td><td class="num fall">−18.2%</td></tr>
+          <tr><td>現貨住宅</td><td class="num">67,611</td><td class="num fall">−18.7%</td></tr>
+          <tr><td>住宅樓花</td><td class="num">103,752</td><td class="num fall">−16.5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure>
+      <svg class="chart" viewBox="0 0 652 218" role="img" aria-label="2025 年澳門住宅每平方米均價橫向條形圖：住宅樓花 103,752 元，路環 81,500 元，氹仔 72,971 元，澳門半島 68,894 元">
+        <line class="c-rule" x1="110" y1="14" x2="110" y2="176"></line>
+        <line class="c-rule" x1="110" y1="176" x2="600" y2="176"></line>
+        <!-- scale: 0 to 110000 MOP across 480px from x=110 -->
+        <g class="c-label">
+          <text x="102" y="34" text-anchor="end">住宅樓花</text>
+          <text x="102" y="70" text-anchor="end">路環</text>
+          <text x="102" y="106" text-anchor="end">氹仔</text>
+          <text x="102" y="142" text-anchor="end">澳門半島</text>
+        </g>
+        <rect x="110" y="22" width="452" height="18" fill="var(--brick)"></rect>
+        <rect x="110" y="58" width="355" height="18" fill="var(--azulejo)"></rect>
+        <rect x="110" y="94" width="318" height="18" fill="var(--azulejo)"></rect>
+        <rect x="110" y="130" width="300" height="18" fill="var(--azulejo)"></rect>
+        <g class="c-value">
+          <text x="570" y="35">103,752</text>
+          <text x="473" y="71">81,500</text>
+          <text x="436" y="107">72,971</text>
+          <text x="418" y="143">68,894</text>
+        </g>
+        <g class="c-axis">
+          <text x="110" y="192" text-anchor="middle">0</text>
+          <text x="328" y="192" text-anchor="middle">50,000</text>
+          <text x="546" y="192" text-anchor="middle">100,000</text>
+          <text x="355" y="206" text-anchor="middle">每平方米實用面積平均價格（澳門元）</text>
+        </g>
+      </svg>
+      <figcaption>樓花每平方米均價 103,752 元，高出現貨住宅 67,611 元逾五成 —— 尚未建成、不具即時居住功能的單位取得最高溢價。此一組對比在第四部分的馬克思分析中是關鍵證據。標籤較長，故採橫向條形圖。</figcaption>
+    </figure>
+
+    <p>2025 年住宅單位成交 3,245 個，按年減少 135 個；成交總值按年下跌 24.6%。2024 年全年整體住宅每平方米均價按年下跌約 9%；2021 年全年按年下跌 1.1%。住宅樓價指數由 2022 年 12 月至 2023 年 2 月的 245.7（按年 −6.7%）降至 2025 年 3 月的 202.4（按年 −10.6%）。</p>
+
+    <div class="t-scroll">
+      <table>
+        <caption>就業人口月工作收入中位數，2025 年各季（澳門元）</caption>
+        <thead>
+          <tr><th>季度</th><th class="num">就業人口</th><th class="num">本地就業居民</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2025 第 1 季</td><td class="num">18,800</td><td class="num">21,500</td></tr>
+          <tr><td>2025 第 2 季</td><td class="num">17,800</td><td class="num">20,000</td></tr>
+          <tr><td>2025 第 3 季</td><td class="num">17,000</td><td class="num">20,000</td></tr>
+          <tr><td>2025 第 4 季</td><td class="num">17,300</td><td class="num">20,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>樓價收入比推算（報告核心論證）</h4>
+    <div class="calc">
+      <div class="row"><span>單位面積（實用）</span><span>70 m²　≈ 753 ft²</span></div>
+      <div class="row"><span>每平方米均價（2025 整體）</span><span>× 70,935 元</span></div>
+      <div class="row"><span>單位總價</span><span>≈ 4,965,000 元</span></div>
+      <div class="row"><span>雙職家庭年收入（20,000 × 2 × 12）</span><span>÷ 480,000 元</span></div>
+      <div class="row out"><span>樓價收入比（雙職家庭）</span><span>≈ 10.3 倍</span></div>
+      <div class="row out"><span>單一收入者</span><span>≈ 20.7 倍</span></div>
+      <div class="row out"><span>國際合理區間</span><span>3 – 6 倍</span></div>
+    </div>
+    <p>即一個雙職本地家庭在完全不消費的假設下，需約十年全部收入方能購入一個 70 平方米單位，且未計利息。對照參考值：香港 14.4 倍（2024 年 Demographia 報告，連續第 14 年為全球最難負擔）；澳門理工學院學生統計研究以 2011 年第 4 季數據、80 平方米單位計得 14 倍；另有研究以中等收入家庭年收入 36 萬元計得 22.89 倍。私人房屋住戶每月平均供款 12,363 元，同期住戶月工作收入平均數 40,575 元，房貸約佔家庭工作收入三成。</p>
+
+    <h4>趨勢判讀（這段是拿分關鍵）</h4>
+    <p>樓價由疫情前高位回落約三成，但收入中位數在 2025 年內亦由 18,800 元降至 17,300 元。樓價下跌並未轉化為可負擔性改善，原因是分母同步收縮。因此「樓價過高」在澳門的準確表述並非「樓價持續上升」，而是<b>樓價相對於勞動收入的水平長期偏離合理區間，且此偏離不因市場回調而消除</b>。</p>
+
+    <h3>問題二　舊區樓宇老化與重建困難</h3>
+
+    <figure>
+      <svg class="chart" viewBox="0 0 620 152" role="img" aria-label="澳門樓宇存量構成條形圖：全澳約六千幢樓宇中，四千八百三十八幢樓齡達三十年以上，其中超過三千五百幢是低層唐樓">
+        <rect x="10" y="24" width="350" height="42" fill="var(--brick)"></rect>
+        <rect x="360" y="24" width="134" height="42" fill="var(--azulejo)"></rect>
+        <rect x="494" y="24" width="116" height="42" fill="var(--surface-sunk)" stroke="var(--rule)" stroke-width="1"></rect>
+        <text class="c-value on-bar" x="24" y="50">&gt; 3,500</text>
+        <text class="c-value on-bar" x="372" y="50">≈ 1,338</text>
+        <text class="c-value" x="506" y="50">≈ 1,162</text>
+        <g>
+          <rect x="10" y="82" width="7" height="7" fill="var(--brick)"></rect>
+          <rect x="10" y="100" width="7" height="7" fill="var(--azulejo)"></rect>
+          <rect x="10" y="118" width="7" height="7" fill="var(--surface-sunk)" stroke="var(--rule)" stroke-width="1"></rect>
+        </g>
+        <g class="c-label">
+          <text x="25" y="90">樓齡 30 年以上 · 低層唐樓（7 層或以下）</text>
+          <text x="25" y="108">樓齡 30 年以上 · 其他樓宇</text>
+          <text x="25" y="126">樓齡 30 年以下</text>
+        </g>
+        <text class="c-axis" x="10" y="16">全澳約 6,000 幢商住及工業樓宇，其中 4,838 幢樓齡達 30 年以上</text>
+      </svg>
+      <figcaption>來源數字為概數（「約 6,000 幢」、「超過 3,500 幢」），故中間一段以相減推算，圖上標為約數。絕大部分屬「三無大廈」：無業主會、無管理公司、無維修基金。</figcaption>
+    </figure>
+
+    <div class="t-scroll">
+      <table>
+        <caption>第 18/2022 號法律《都市更新法律制度》的業主同意門檻</caption>
+        <thead>
+          <tr><th>樓宇狀況</th><th class="num">重建所需業主同意比例</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>樓齡 30 年以上</td><td class="num">90%</td></tr>
+          <tr><td>樓齡 40 年以上</td><td class="num">80%</td></tr>
+          <tr><td>經評定為危樓或危害公共衛生安全</td><td class="num">60%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>建築物一旦超過設計使用年限，結構安全與設施老化風險上升。但重建受制於三重障礙：業主同意門檻高、產權分散（唐樓業主眾多且部分失聯）、以及「三無」狀態下缺乏維修基金與集體決策機制。結果是<b>老化速度快於更新速度</b>。都市更新模式包括重建、維修保養、保存及活化；補償方式包括單位置換、按公平市值的現金補償及搬遷特別津貼。</p>
+
+    <p>課堂上提到的矛盾值得寫進報告：舊區存在空置舊樓，同時年輕人無法置業；且重建後若要在同一地塊安置更多住戶，必然涉及容積率與居住密度的取捨。</p>
+
+    <h3>問題三　舊區居住環境惡化</h3>
+
+    <div class="t-scroll">
+      <table>
+        <caption>公共房屋供應與需求缺口</caption>
+        <thead>
+          <tr><th>項目</th><th class="num">數值</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>全澳住宅單位總數（截至 2021 年 6 月底）</td><td class="num">238,464</td></tr>
+          <tr><td>其中社會房屋單位</td><td class="num">15,037</td></tr>
+          <tr><td>社會房屋佔全澳住宅單位比例</td><td class="num">6.3%</td></tr>
+          <tr><td>推算 2025 年社屋所需總量（區間中值）</td><td class="num">17,394</td></tr>
+          <tr><td>在建經濟房屋項目（10 個）單位總數</td><td class="num">10,669</td></tr>
+          <tr><td>社屋中專為體弱長者設計的單位</td><td class="num">1,006</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>在建的十個經屋項目將於 2025 年第 4 季至 2028 年第 4 季竣工交付。體弱長者單位分佈於嘉翠麗大廈 B 及 C 座、青洲社屋青松樓、筷子基社屋快富樓。夾心階層住房方面，售價以相鄰區域私樓價格作一定比例折扣計算，並設 16 年不可轉讓期限；但 2026 年政府評估夾屋需求「不算迫切」，正考慮快環順利樓北側地塊是否改作其他用途。</p>
+
+    <p>舊區唐樓多無電梯、公共空間不足、消防與通風條件差，而居住者以長者與低收入家庭為主，形成居住條件與經濟能力的雙重弱勢疊加。公共房屋供應量與推算需求之間存在缺口，夾屋政策的推進反覆則使夾心階層的階梯「斷鏈」風險持續。</p>
+
+    <div class="verify">
+      <h4>放進評分報告前請自行核實的四項</h4>
+      <ul>
+        <li>老師口述的「澳門樓價收入比推算 14.8、香港約 16 年」未能定位到來源報告。上文改用可核實的 DSEC 原始數據自行推算（10.3 倍），並附香港 14.4 倍的 Demographia 對照值。若要用 14.8，須先問老師出處。</li>
+        <li>2024 年全年樓價跌幅「約 9%」及各分區跌幅來自搜尋摘要，建議核對 DSEC 2024 年第 4 季報告原文。</li>
+        <li>「2019 年 6 月底 30 年以上樓宇 5,173 幢」與現時「4,838 幢」方向矛盾（後期數字反而較少），可能因統計定義或拆卸改建所致。未釐清前<b>不要並列這兩個數字</b>作時間趨勢。</li>
+        <li>2025 年成交總值「153.3 億澳門元」的單位需核對（搜尋工具曾把「億」誤譯為 billion）。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="sec-num">第三部分</span>
+    <h2>社會因素</h2>
+    <span class="marks heavy">與理論合計 20 分</span>
+  </div>
+  <div class="wrap">
+    <p>Guideline 列出五類社會因素（經濟／政治和法律／社會文化／社會人口／地理和物理環境）。下選四類，每類均須<b>同時</b>影響上述三個問題 —— 這是老師特別強調的要求。</p>
+
+    <div class="item">
+      <p class="item-kicker">經濟</p>
+      <h3>單一產業結構與資產收入的分配失衡</h3>
+      <p>博彩業主導的經濟結構使大量資本集中流入澳門，而土地與房產成為資本增值的主要載體。勞動收入的增長速度長期落後於資產價格：2025 年就業人口月工作收入中位數為 17,300 元，而住宅每平方米均價為 70,935 元，即一個月的中位收入不足以購入四分之一平方米。博彩業的週期性波動又使居民收入穩定性偏低，疫情期間的收入衝擊與樓價回調同步發生，可負擔性未見改善。此因素同時抬高私樓價格、削弱舊區業主自費維修重建的能力，並使低收入家庭被固定於居住條件較差的舊區。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">政治和法律（公共政策）</p>
+      <h3>土地供應限制與更新法律的門檻設計</h3>
+      <p>土地供應受制於填海造地的時間與成本，新城填海區的開發週期以十年計。階梯房屋政策在設計上覆蓋不同收入層，但夾屋一環推進反覆，2026 年政府評估其需求「不算迫切」，使夾心階層缺乏對應選項。第 18/2022 號法律為都市更新設定的業主同意門檻（30 年以上樓宇需九成）雖保障私有產權，卻在產權高度分散的唐樓實際上構成重建障礙。經濟房屋的定價與轉讓限制則影響公共房屋在階梯間的流動性。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">社會人口</p>
+      <h3>高密度、人口老化與家庭結構變化</h3>
+      <p>澳門人口密度居全球前列，約 33 平方公里的土地承載逾六十萬人口。人口老化使長者集中於樓齡較高的舊區，而無電梯唐樓對長者的可達性問題最為尖銳 —— 社會房屋中特別設計 1,006 個體弱長者單位，反映此需求的規模。家庭結構小型化提高了單位需求數量，在單位總量受限的條件下加劇供需張力。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">地理和物理環境</p>
+      <h3>土地稀缺與建築存量老化</h3>
+      <p>土地面積限制是所有房屋問題的物理前提：新增供應只能依靠填海或舊區重建，兩者週期均長。建築存量方面，約 6,000 幢樓宇中有 4,838 幢樓齡達 30 年以上，其中超過 3,500 幢為低層唐樓，形成龐大且集中的老化存量。舊區的高密度佈局使重建期間的居民安置缺乏鄰近可用空間，進一步壓縮更新的可行性。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="sec-num">第四部分</span>
+    <h2>應用馬克思理論解釋</h2>
+    <span class="marks">4–5 頁</span>
+  </div>
+  <div class="wrap">
+    <p>老師明確要求：不必複述整套馬克思主義，重點是<b>應用</b>於澳門房屋問題。以下按四個理論工具展開，每個工具都掛回第二部分的實際數據。</p>
+
+    <div class="item">
+      <p class="item-kicker">理論工具一</p>
+      <h3>使用價值與交換價值的矛盾</h3>
+      <p>馬克思區分商品的使用價值與交換價值。住宅的使用價值是遮風擋雨的居住功能，交換價值是其在市場上可換取的貨幣量。房屋問題的根源在於交換價值支配了使用價值：住宅不再主要作為居住空間被生產與分配，而是作為資本增值的載體被持有與交易。</p>
+      <p>澳門數據可直接印證此點：2025 年住宅樓花每平方米均價 103,752 元，遠高於現貨住宅的 67,611 元。樓花尚未建成、不具任何即時居住功能，卻取得超過五成的價格溢價 —— 買家支付的是對未來交換價值的預期，而非當下的使用價值。同一邏輯解釋了課堂上提到的矛盾現象：舊區存在空置單位，同時有家庭無法取得住房。空置對使用價值而言是純粹浪費，但對持有者的交換價值而言完全合理。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">理論工具二</p>
+      <h3>地租理論與土地壟斷</h3>
+      <p>馬克思的地租理論指出，土地所有者憑藉土地的不可再生與壟斷性質，無須參與生產即可持續收取地租，而地租最終來自社會總剩餘價值的分配。澳門的地理條件使這一機制格外突出：土地面積約 33 平方公里且不可擴張，博彩業帶來的資本積累又不斷推高對土地的競爭性需求。結果是土地與房產的持有者取得與其勞動無關的資產增值，而僅擁有勞動力的居民則須以勞動收入的長期流向換取居住權。</p>
+      <p>樓價收入比約十倍的意義在馬克思框架下可如此表述：一個家庭須將約十年的全部勞動所得轉移給房產持有者與地產資本，方能取得居住空間的所有權。這不是市場摩擦，而是剩餘價值在資本與勞動之間的分配結果。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">理論工具三</p>
+      <h3>階級結構與住房的階級分化</h3>
+      <p>馬克思以是否佔有生產資料界定階級。在當代住房議題上，此界線體現為是否佔有房產這一資產：持有物業者在資產升值中獲益，僅靠工資收入者則被排除於資產積累之外，並須以工資支付租金或房貸。澳門的「夾心階層」正是這一結構的產物 —— 他們的收入超出公共房屋的資格上限，卻不足以進入私人市場，其困境並非源於個人選擇失當，而是階級結構在住房分配制度中的必然位置。</p>
+      <p>居住空間的階級分化在澳門呈現明確的空間形態：低收入家庭與長者集中於樓齡 30 年以上、無電梯、缺乏管理的「三無大廈」，而新建單位與較佳居住條件則按支付能力分配。居住條件的差異是階級不平等在空間上的投射。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">理論工具四</p>
+      <h3>勞動力再生產與國家的調節角色</h3>
+      <p>馬克思指出資本主義體系須維持勞動力的再生產，而住房是勞動力再生產的必要條件。當住房成本超出工資可負擔範圍，再生產即出現危機，表現為延遲成家、生育率下降與青年人口外流。這解釋了為何房屋問題會由個別家庭的困難升級為政府必須回應的社會問題：它威脅的不只是居民福祉，也是勞動力供給的延續。</p>
+      <p>國家介入因此具有雙重性。澳門的階梯房屋政策以公共資源為部分居民提供市場以外的居住選項，緩和了階級矛盾並維持勞動力再生產。但從馬克思的視角看，這類政策調節的是矛盾的表現形式，而非產生矛盾的分配結構本身：社會房屋僅佔全澳住宅單位約 6.3%，其餘住房仍按支付能力分配，房產作為資本增值載體的性質未被改變。都市更新亦可如此解讀 —— 舊區重建在改善居住條件的同時，也是資本對舊區空間的再開發，若無配套保障，原居民可能因租金與物價上升而被置換，即仕紳化過程。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">小結</p>
+      <h3>理論的解釋力落在哪裡</h3>
+      <p>馬克思理論對澳門房屋問題的解釋力在於：它不把房屋問題歸因於個別家庭的儲蓄不足或投資失當，而指向住宅商品化條件下交換價值對使用價值的支配、土地壟斷產生的地租分配，以及由此形成的階級化住房分配結構。這一視角同時解釋了三個具體問題的共同根源，也說明了為何在樓價下跌的年份，可負擔性問題依然存在。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="sec-num">第五部分</span>
+    <h2>紓解方案</h2>
+    <span class="marks">3–4 項 · 2–3 頁</span>
+  </div>
+  <div class="wrap">
+    <p>老師強調要<b>具體</b>，不能只寫「增建公屋」，須說明建多少、哪一類、在哪裡、如何定價。</p>
+
+    <div class="item">
+      <p class="item-kicker">措施一 · 針對問題一</p>
+      <h3>以樓價收入比為公共房屋供應量的定錨指標</h3>
+      <p>現行公共房屋規劃以需求推算量為依據（如推算 2025 年社屋需求區間中值 17,394 間，對比現有 15,037 間）。建議改為同時以可負擔性指標定錨：設定樓價收入比的政策目標區間，當比率超出上限時自動觸發公共房屋供應量的上調與推地計劃的檢討。此舉使供應決策與居民實際負擔能力掛鈎，而非僅與登記需求掛鈎。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">措施二 · 針對階梯斷鏈</p>
+      <h3>重啟夾心階層住房並明確定價與供應時間表</h3>
+      <p>夾屋是階梯房屋政策中唯一針對夾心階層的環節，但 2026 年政府評估其需求「不算迫切」，快環順利樓北側地塊的用途仍在檢討。建議明確該地塊的夾屋用途、公布單位數量與落成時間表，並維持以相鄰區域私樓價格折扣定價、設不可轉讓期限的設計，以避免公共資源外溢為投資收益。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">措施三 · 針對問題二與問題三</p>
+      <h3>以維修基金與強制業主會制度切入「三無大廈」</h3>
+      <p>4,838 幢樓齡 30 年以上樓宇中超過 3,500 幢為低層唐樓，且絕大部分無業主會、無管理公司、無維修基金。在九成同意門檻難以下調的現實下，建議將政策重心由「重建」前移至「維修與管理」：對樓齡達標的樓宇強制設立業主會與維修基金，並以現行低層樓宇共同設施維修資助計劃為基礎擴大資助覆蓋與金額。此舉在重建不可行時延緩老化並改善即時居住安全。</p>
+    </div>
+
+    <div class="item">
+      <p class="item-kicker">措施四 · 與理論部分呼應</p>
+      <h3>在都市更新中設置原居民安置與防仕紳化條款</h3>
+      <p>現行補償方式已包括單位置換、公平市值現金補償與搬遷津貼。建議在指定更新區域內進一步設置原居民回遷比例下限與更新後租金管制年期，使更新的收益不全數轉化為資本增值。此措施直接回應第四部分指出的置換風險，使理論分析與政策建議形成呼應 —— 這一點在評分上有加成作用。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="sec-num">訪問</span>
+    <h2>訪問安排與大綱</h2>
+    <span class="marks">1–2 位相關社會人士</span>
+  </div>
+  <div class="wrap">
+    <h4>受訪對象建議</h4>
+    <ul class="plain">
+      <li>立法會議員（長期就房屋議題發言者）</li>
+      <li>關注房屋或舊區事務的社團代表（街坊會、業主組織）</li>
+      <li>房屋局或都市更新股份有限公司的相關人員</li>
+      <li>舊區樓宇的業主會成員或物業管理從業者</li>
+      <li>地產代理從業者（可提供樓價與成交的實務觀察）</li>
+    </ul>
+    <p style="font-size:var(--step--1);color:var(--ink-soft)">老師提示的找人方法：翻看報紙，找長期就澳門房屋問題發表意見的人士。</p>
+
+    <div class="qgroup">
+      <p class="qlabel">A · 現況與具體問題</p>
+      <ol class="qs">
+        <li>以您的接觸經驗，澳門居民在住房上最常遇到的具體困難是哪幾類？</li>
+        <li>近五年樓價明顯回落，您觀察到居民的置業難度有實際改善嗎？為甚麼？</li>
+        <li>哪一類家庭的處境最被現行政策忽略？</li>
+      </ol>
+    </div>
+
+    <div class="qgroup">
+      <p class="qlabel">B · 社會因素</p>
+      <ol class="qs" start="4">
+        <li>您認為造成這些困難的主要原因有哪些？（追問：屬經濟、政策法律、人口，還是土地環境層面）</li>
+        <li>舊區樓宇難以重建，最主要的障礙是甚麼？業主同意門檻在實際操作中的影響有多大？</li>
+        <li>「三無大廈」的問題在您接觸的個案中有多普遍？</li>
+      </ol>
+    </div>
+
+    <div class="qgroup">
+      <p class="qlabel">C · 具體措施</p>
+      <ol class="qs" start="7">
+        <li>若可調整一項現行房屋政策，您會選哪一項，如何調整？</li>
+        <li>夾心階層住房應否繼續推進？理由是甚麼？</li>
+        <li>都市更新過程中，如何避免原居民被迫遷離？</li>
+      </ol>
+    </div>
+
+    <div class="verify" style="border-color:var(--rule)">
+      <h4 style="color:var(--ink)">訪問技巧提醒（老師特別說明）</h4>
+      <ul>
+        <li>受訪者不是社會學家，<b>不要問馬克思理論</b>，他們答不到。</li>
+        <li>訪問內容的用法是<b>當作文獻引用入正文</b>，主要補充「社會因素」與「具體措施」兩部分。</li>
+        <li>若受訪者談的是個人因素（如「年輕人不儲錢」），你要自行把其中的社會結構成分抽出來使用，<b>不可原話照搬當作社會因素</b>。</li>
+      </ul>
+    </div>
+
+    <h4>訪問交代（放在參考文獻之後、報告最後一部分）</h4>
+    <ul class="plain">
+      <li>願意公開身份者：附相片一張加兩至三行背景介紹</li>
+      <li>不願公開身份者：仍須說明其工作與相關性，以證明訪問確實進行且對象具相關資格</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="sec-num">文獻</span>
+    <h2>參考文獻</h2>
+    <span class="marks">15 份 · 要求 ≥ 10</span>
+  </div>
+  <div class="wide">
+    <p class="ref-group">政府統計與官方文件</p>
+    <ol class="refs">
+      <li>澳門統計暨普查局（2026）。<b>《2025 年全年及第四季私人建築及不動產交易統計》</b>。</li>
+      <li>澳門統計暨普查局（2026）。<b>《就業調查》</b>各季度報告，2025 年第 1 至第 4 季。</li>
+      <li>澳門統計暨普查局。<b>《住宅樓價指數》</b>月度報告。</li>
+      <li><b>第 18/2022 號法律《都市更新法律制度》</b>。澳門特別行政區公報。</li>
+      <li>政策研究和區域發展局（2022 年 1 月）。<b>《澳門特別行政區居住用途房屋政策研究》</b>。</li>
+      <li>政策研究和區域發展局（2022 年 1 月）。<b>《澳門未來房屋需求研究 —— 五大類房屋需求估計摘要文本》</b>。</li>
+      <li>《夾心階層住房方案》跨部門工作小組（2021 年 4 月）。<b>《夾心階層住房方案公開諮詢總結報告》</b>。</li>
+      <li>澳門公共治理研究中心（2017 年 9 月）。<b>《公共房屋需求研究最終報告》</b>。房屋局。</li>
+    </ol>
+
+    <p class="ref-group">學術文獻</p>
+    <ol class="refs" start="9">
+      <li>高武洲（2017）。〈澳門公共房屋在城巿設計方面的關鍵問題〉。<b>《澳門研究》</b>，2017 年第 3 期。</li>
+      <li>阮白施。〈澳門房屋價格發展情況〉。<b>澳門金融管理局季報</b>。</li>
+      <li>Housing affordability in Macau: evidence and policy. <b><i>China Economic Journal</i></b>, 6(1), 2013.</li>
+      <li>澳門文遺研創協會（2025 年 6 月）。<b>《澳門經濟房屋的建築型態和演變》</b>學術研究。</li>
+      <li>Demographia (2025). <b><i>International Housing Affordability, 2025 Edition</i></b>.</li>
+    </ol>
+
+    <p class="ref-group">新聞與評論</p>
+    <ol class="refs" start="14">
+      <li>論盡媒體（2022 年 3 月 12 日）。〈政策橫跨三屆 從「舊區重整」到「都市更新」〉。</li>
+    </ol>
+
+    <p class="ref-group">訪問</p>
+    <ol class="refs" start="15">
+      <li>受訪者一、受訪者二（詳見訪問交代部分）。</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="sec-num">待辦</span>
+    <h2>仍待完成的工作</h2>
+  </div>
+  <div class="wrap">
+    <ol class="todo">
+      <li><b>確認三個問題的最終選定。</b>上文以課堂初步答案為準（私樓樓價過高、舊區重建、舊區居住環境）。若要改用「濫用社屋經屋」替換其中一項，第二至第五部分需相應調整。</li>
+      <li><b>完成 1 至 2 個訪問。</b>訪問內容須併入社會因素與紓解措施兩部分。</li>
+      <li><b>核實第二部分末列出的四項數據。</b></li>
+      <li><b>補 2021 至 2024 年的樓價與收入完整序列。</b>現有數據以 2025 年最完整，五年趨勢圖尚缺中間年份的精確值，需查 DSEC 各年年度報告。</li>
+      <li><b>製作 PowerPoint。</b>30 頁以上，依頁數預算分配。</li>
+      <li><b>演練 45 分鐘匯報。</b>純熟報告技巧佔 10 分。</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <p>資料來源以澳門統計暨普查局公開統計為主，標示為概數或待核實者請於使用前核對原始報告。本頁為研習初稿架構，非最終匯報稿。</p>
+</footer>
