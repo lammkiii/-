@@ -1,6 +1,6 @@
 # 論文初稿協作流程
 
-搭配 `writing-rules.md` 使用。規則是「怎麼寫」，本檔是「按什麼順序寫、我需要你給什麼」。
+搭配 `writing-rules.md` 使用。規則是「怎麼寫」，本檔是「按什麼順序寫、每節我需要你給什麼」。
 
 ---
 
@@ -30,39 +30,57 @@ Part II 的 skills（需 Cursor / Claude Code + `npx openskills install`）與�
 
 ---
 
-## B. 撰稿順序
+## B. 章節結構：IMRaD 對映
 
-專案的 `20-ml-paper-writing` 輸出順序是 Abstract → Introduction → Methods → Experiments → Related Work → Limitations。
-實際起草建議倒過來從最確定的部分開始，避免 Abstract 反覆改：
+採用 Introduction / Method / Results / Discussion 結構。
 
-1. **確認一句話貢獻**（先對齊，不對齊不往下寫）
-2. **Method**：問題定義 → 符號 → 模組 → 資料流 → 關鍵公式
-3. **Experiments**：主表 → 消融 → 分析段（用「實驗分析」prompt 的 `\paragraph{}` 格式）
-4. **Introduction**：背景 → gap → 我們的做法 → 貢獻列點（正文仍用連貫段落）
-5. **Related Work**：分支劃界 + 與本文的差異點
-6. **Abstract**：最後寫，從已定稿的 Intro + 主結果壓縮
-7. **Limitations / Broader Impact**：按會議要求
-8. **收尾三連**：去 AI 味 → 邏輯檢查 → Reviewer 視角審視
+需要注意的落差：本專案整體面向 CS 頂會（ICML / ICLR / NeurIPS / ACL），它的預設骨架是
+Abstract → Introduction → Method → Experiments → Related Work → Limitations，
+**沒有獨立的 Discussion 節** —— 討論的功能被拆進了「實驗分析」與「Limitations」。
+因此 Results 與 Discussion 的分工要自己界定，Discussion 節借用的是專案裡
+「Reviewer 視角審視」與「邏輯檢查」的判準，而非某個現成 prompt。
 
-每節產出後給 Part 1 正文 + Part 2 中文直譯，方便核對邏輯是否走偏。
+| 章節 | 對應專案資源 | 我需要的材料 | 該節的規範重點 |
+|---|---|---|---|
+| **Introduction** | 中轉英 / 中轉中 → 去 AI 味 | 背景、領域 gap、既有工作為何不足、你的切入點、貢獻條目 | 一段一個核心觀點；貢獻**不可**寫成 `\item` 列表，要連貫段落；一般現在時；避免「痛點」「範式轉移」這類渲染詞 |
+| **Method** | 中轉英-latex（+ 擴寫顯式化隱含前提） | 問題定義、符號約定、模組組成、資料流向、關鍵公式、與最接近工作的差異點 | 公式保留 `$`；LaTeX 場景轉義 `%` `_` `&`；禁列表；擴寫只准顯式化原文隱含的前提與因果，嚴禁補出原文沒有的設定 |
+| **Results** | 實驗分析 + 實驗繪圖推薦 + 生成圖/表標題 | 主表原始數值（貼 Excel/CSV 行列最好）、消融、效率數據、方差、每張圖想強調的結論 | `\paragraph{Title Case 短語結論}` + 緊接數值推演；拒絕「A 是 0.5，B 是 0.6」報帳式；資料無明顯優勢就如實描述，不誇大提升幅度 |
+| **Discussion** | Reviewer 視角審視 + 邏輯檢查的判準 | 結論的適用邊界、失敗案例、與既有工作的理論關係、已知限制、未來工作 | 區分「方法層面的結構性缺陷」與「可修訂的小問題」；資料撐不起的推論如實標明；不把表述問題寫成方法貢獻 |
+
+若後續需要 Abstract、Related Work、Limitations，留到主體定稿後再補（Abstract 最後寫，避免反覆改）。
+
+### 起草順序
+
+不按閱讀順序寫，從最確定的部分開始：
+
+1. **確認一句話核心貢獻**（不對齊不往下寫）
+2. **Method** —— 內容最確定，先定下符號與模組命名，後面各節沿用
+3. **Results** —— 數據既定，順帶把圖表類型與 caption 一起定
+4. **Introduction** —— 回頭寫，gap 的描述要能對上 Results 真正驗證到的東西
+5. **Discussion** —— 最後，因為它依賴前三節的定稿
+6. **收尾三連**：去 AI 味 → 邏輯檢查 → Reviewer 視角審視
+
+每節產出給 Part 1 正文 + Part 2 中文直譯，方便核對邏輯有沒有走偏。
 
 ---
 
 ## C. 我需要你提供的材料
 
-按重要性排序。**1–3 是起草的前提，缺了只能瞎猜；4–9 可以邊寫邊補。**
+**前三項是起草的前提，缺了只能瞎猜；其餘可以邊寫邊補。**
 
-1. **投稿目標**：會議 / 期刊名稱與年份、頁數限制、截稿日。（決定模板、篇幅分配、Limitations 與 Broader Impact 是否必需）
+1. **投稿目標**：會議 / 期刊名稱與年份、頁數限制、截稿日。（決定篇幅分配、Related Work 位置、Limitations 與 Broader Impact 是否必需）
 2. **載體與語言**：LaTeX 還是 Word？英文還是中文？（直接決定轉義、Markdown、標點這組硬約束走哪一支）
 3. **一句話核心貢獻** + 2–4 條 claim。
 4. **方法**：問題定義、符號約定、模組組成、資料流向、關鍵公式、與最接近的已有工作的差異點。
 5. **實驗**：資料集、baseline 名稱與版本、評測指標、主表數值（**直接貼 Excel / CSV 原始行列結構最好**）、消融設置、超參敏感性、效率數據（參數量 / 顯存 / 延遲）、隨機種子數與方差。
 6. **圖表**：已有的圖、每張圖想強調的核心結論。
-7. **Related Work**：領域分支與代表作（能給 BibTeX 更好）。
-8. **已知限制與弱點**：用於寫 Limitations、以及提前降低 rebuttal 攻擊面。
+7. **文獻筆記 / Related Work**：領域分支與代表作（能給 BibTeX 更好）。
+8. **已知限制與弱點**：用於寫 Discussion 與 Limitations，並提前降低 rebuttal 攻擊面。
 9. **現成素材**：repo 路徑、README、`results/`、實驗筆記、之前寫過的草稿片段。
 
-### 兩條我不會越界的地方
+材料零散、口語化、有邏輯跳躍都沒關係 —— 「中轉中-word」那個 prompt 的設計前提本來就是處理這種輸入。
 
-- **不編數據、不編文獻**：缺的數值標 `[DATA NEEDED]`，未核實的引用標 `[CITATION NEEDED]`，不會拿相近數字湊或憑記憶寫 BibTeX。
-- **不替你拔高結論**：資料撐不起的 claim 我會直接說撐不起，並給可行的補實驗建議，而不是換個說法把它寫得更好聽。
+### 兩條不越界的紅線
+
+- **不編數據、不編文獻**：缺的數值標 `[DATA NEEDED]`，未核實的引用標 `[CITATION NEEDED]`，不拿相近數字湊，不憑記憶寫 BibTeX。
+- **不替你拔高結論**：資料撐不起的 claim 直接說撐不起，並給可行的補實驗建議，而不是換個說法把它寫得好聽。
